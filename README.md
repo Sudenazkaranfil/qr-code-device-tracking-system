@@ -18,7 +18,8 @@ In this project, the entry/exit processes of the devices in the laboratory envir
 ### Installation
 1. Install the necessary libraries:
 ```bash
-pip install -r requirements.txt ```
+pip install -r requirements.txt
+```
 
 ## 🌍TR
 Bu projede, laboratuvar ortamındaki cihazların kullanıcılar tarafından giriş/çıkış işlemleri QR kod aracılığıyla web tabanlı olarak kaydedilir. Flask kullanılarak geliştirilen bu sistem, PostgreSQL veritabanı ile entegre çalışır.
@@ -38,4 +39,5 @@ Bu projede, laboratuvar ortamındaki cihazların kullanıcılar tarafından giri
 ### Kurulum
 1. Gerekli kütüphaneleri yükleyin:
 ```bash
-pip install -r requirements.txt ```
+pip install -r requirements.txt
+```
