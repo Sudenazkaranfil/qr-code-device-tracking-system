@@ -1,6 +1,6 @@
 import qrcode, os
 
-base_url = "https://kuyam-cihaz-takip-sistemi.onrender.com/cihaz"
+base_url = "https://kuyam-cihaz-takip.onrender.com/cihaz"
 os.makedirs("qr_codes", exist_ok=True)
 
 # Cihazlar (id) listesi
