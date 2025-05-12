@@ -1,6 +1,10 @@
 from flask import Flask, render_template, request
 import psycopg2
 from datetime import datetime
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # .env dosyasını yükler
 
 app = Flask(__name__)
 
