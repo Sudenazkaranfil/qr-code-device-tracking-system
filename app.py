@@ -97,4 +97,6 @@ def device_entry(device_id):
     return render_template("device_entry.html", device_id=device_id, device_name=device_name)
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    port = int(os.getenv("PORT", 5001))  # Render'da port dinamik olabilir
+    app.run(debug=True, port=port, host="0.0.0.0")
+
