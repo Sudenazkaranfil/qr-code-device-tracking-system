@@ -7,11 +7,11 @@ app = Flask(__name__)
 # Veritabanı bağlantısı
 def get_connection():
     return psycopg2.connect(
-        dbname="kuyamdb",
-        user="postgres",
-        password="1234",
-        host="localhost",
-        port="5432"
+        dbname=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT")
     )
 
 @app.route("/cihaz/<int:device_id>", methods=["GET", "POST"])
