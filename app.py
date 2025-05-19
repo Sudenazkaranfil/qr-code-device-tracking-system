@@ -17,6 +17,10 @@ def get_connection():
         host=os.getenv("DB_HOST"),
         port=os.getenv("DB_PORT")
     )
+    
+@app.route("/")
+def home():
+    return render_template("index.html")
 
 @app.route("/cihaz/<int:device_id>", methods=["GET", "POST"])
 def device_entry(device_id):
