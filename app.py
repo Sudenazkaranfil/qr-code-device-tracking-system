@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, session
 import psycopg2
 from datetime import datetime
 import os
@@ -19,7 +19,8 @@ def home():
 @app.route("/admin")
 def admin_panel():
     if not session.get("admin"):
-        return redirect(url_for("admin_login"))
+        flash("Önce giriş yapmalısınız.", "warning")
+        return redirect(url_for("home"))
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -29,6 +30,16 @@ def admin_panel():
     conn.close()
 
     return render_template("admin_panel.html", kayitlar=kayitlar)
+@app.route("/admin_login", methods=["POST"])
+def admin_login():
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    if email == os.getenv("ADMIN_EMAIL") and password == os.getenv("ADMIN_PASSWORD"):
+        session["admin"] = True
+        return redirect(url_for("admin_panel"))
+    else:
+        return render_template("index.html", login_error="❌ Giriş başarısız.")
 
 @app.route("/cihaz/<int:device_id>", methods=["GET", "POST"])
 def device_entry(device_id):
