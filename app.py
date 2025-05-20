@@ -16,6 +16,20 @@ def get_connection():
 def home():
     return render_template("index.html")
 
+@app.route("/admin")
+def admin_panel():
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT email, cihaz_id, usage_start, usage_end FROM device_tracking ORDER BY usage_start DESC")
+    kayitlar = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    return render_template("admin_panel.html", kayitlar=kayitlar)
+
 @app.route("/cihaz/<int:device_id>", methods=["GET", "POST"])
 def device_entry(device_id):
     conn = get_connection()
