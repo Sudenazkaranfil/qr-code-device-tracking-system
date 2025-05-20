@@ -1,0 +1,18 @@
+<h2>Cihaz Kullanım Kayıtları</h2>
+<table border="1">
+    <tr>
+        <th>Email</th>
+        <th>Cihaz</th>
+        <th>Giriş</th>
+        <th>Çıkış</th>
+    </tr>
+    {% for k in kayitlar %}
+    <tr>
+        <td>{{ k[0] }}</td>
+        <td>{{ k[1] }}</td>
+        <td>{{ k[2] }}</td>
+        <td>{{ k[3] if k[3] else 'Aktif' }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<p><a href="/admin/logout">Çıkış Yap</a></p>
