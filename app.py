@@ -35,9 +35,10 @@ def admin_login():
     email = request.form.get("email")
     password = request.form.get("password")
 
-    if email == os.getenv("ADMIN_EMAIL") and password == os.getenv("ADMIN_PASSWORD"):
+    if email.lower() == os.getenv("ADMIN_EMAIL").lower() and password == os.getenv("ADMIN_PASSWORD"):
         session["admin"] = True
         return redirect(url_for("admin_panel"))
+
     else:
         return render_template("index.html", login_error="❌ Giriş başarısız.")
 
