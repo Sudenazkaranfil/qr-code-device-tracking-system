@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Cihaz Takip Sistemi</title>
+  <title>Cihaz Takip Sistemi - Kuyam</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
   <style>
@@ -13,31 +13,39 @@
       padding: 0;
       display: flex;
       flex-direction: column;
-      align-items: center;
       min-height: 100vh;
     }
 
     header {
-      text-align: center;
-      margin-top: 30px;
+      display: flex;
+      align-items: center;
+      padding: 20px 30px;
     }
 
     header img {
-      height: 90px;
+      height: 60px;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
     }
 
     h1 {
       color: #0077b6;
-      margin-top: 30px;
       font-size: 32px;
+      margin-top: 20px;
     }
 
-    p {
+    p.description {
       font-size: 16px;
-      color: #333;
-      text-align: center;
       max-width: 600px;
-      margin: 10px 20px 30px;
+      margin: 10px auto 30px;
+      color: #444;
     }
 
     .button {
@@ -49,6 +57,7 @@
       border-radius: 10px;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
     .button:hover {
@@ -102,13 +111,12 @@
       text-align: center;
       font-size: 14px;
       color: #999;
-      margin-top: auto;
       padding: 30px 0 15px;
     }
 
     footer img {
       height: 40px;
-      opacity: 0.2;
+      opacity: 0.25;
       margin-bottom: 8px;
     }
   </style>
@@ -124,30 +132,34 @@
     <img src="/static/ksbu_logo.png" alt="KSBU Logo">
   </header>
 
-  <h1>Hoş Geldiniz</h1>
-  <p>Kuyam Laboratuvarı cihaz takip sistemine hoş geldiniz. QR kodları kullanarak cihazlara giriş yapabilirsiniz.</p>
+  <main>
+    <h1>Hoş Geldiniz</h1>
+    <p class="description">
+      Bu sistem, <strong>Kuyam Laboratuvarı</strong>'nda kullanılan cihazlara QR kod ile giriş ve çıkış işlemlerini dijital olarak kayıt altına almak için tasarlanmıştır.
+    </p>
 
-  <button class="button" onclick="showForm()">🔐 Admin Paneli</button>
+    <button class="button" onclick="showForm()">🔐 Admin Paneli</button>
 
-  <div id="adminForm" class="form-container">
-    <form method="POST" action="/admin_login">
-      <input type="email" name="email" placeholder="Admin Email" required>
-      <input type="password" name="password" placeholder="Şifre" required>
-      <button type="submit">Giriş Yap</button>
-    </form>
+    <div id="adminForm" class="form-container">
+      <form method="POST" action="/admin_login">
+        <input type="email" name="email" placeholder="Admin Email" required>
+        <input type="password" name="password" placeholder="Şifre" required>
+        <button type="submit">Giriş Yap</button>
+      </form>
 
-    {% if login_error %}
-      <div class="message">{{ login_error }}</div>
-    {% endif %}
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="message">{{ message }}</div>
-        {% endfor %}
+      {% if login_error %}
+        <div class="message">{{ login_error }}</div>
       {% endif %}
-    {% endwith %}
-  </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="message">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
+  </main>
 
   <footer>
     <img src="/static/ksbu_logo.png" alt="KSBU">
