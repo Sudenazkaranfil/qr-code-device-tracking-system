@@ -1,18 +1,67 @@
-<h2>Cihaz Kullanım Kayıtları</h2>
-<table border="1">
-    <tr>
-        <th>Email</th>
-        <th>Cihaz</th>
-        <th>Giriş</th>
-        <th>Çıkış</th>
-    </tr>
-    {% for k in kayitlar %}
-    <tr>
-        <td>{{ k[0] }}</td>
-        <td>{{ k[1] }}</td>
-        <td>{{ k[2] }}</td>
-        <td>{{ k[3] if k[3] else 'Aktif' }}</td>
-    </tr>
-    {% endfor %}
-</table>
-<p><a href="/admin/logout">Çıkış Yap</a></p>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Paneli</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f8f9fa;
+        }
+        h2 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        a.logout {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: red;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        a.logout:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <h2>Cihaz Kullanım Kayıtları</h2>
+    <table>
+        <tr>
+            <th>Email</th>
+            <th>Cihaz</th>
+            <th>Giriş</th>
+            <th>Çıkış</th>
+        </tr>
+        {% for k in kayitlar %}
+        <tr>
+            <td>{{ k[0] }}</td>
+            <td>{{ k[1] }}</td>
+            <td>{{ k[2] }}</td>
+            <td>{{ k[3] if k[3] else '🔴 Aktif' }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('admin_logout') }}" class="logout">Çıkış Yap</a>
+</body>
+</html>
