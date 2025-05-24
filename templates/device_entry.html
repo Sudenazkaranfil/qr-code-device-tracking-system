@@ -51,6 +51,10 @@
             color: red;
             font-size: 16px;
         }
+        .success {
+            color: green;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -61,8 +65,12 @@
         <input type="email" name="email" placeholder="E-posta adresi" required>
         <button type="submit" class="button">Giriş Yap</button>
     </form>
+
     {% if error %}
         <p class="error">{{ error }}</p>
+    {% endif %}
+    {% if message %}
+        <p class="success">{{ message }}</p>
     {% endif %}
 </div>
 
