@@ -6,62 +6,76 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 40px;
             background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 100px;
         }
         h1 {
             color: #333;
-            text-align: center;
+            margin-bottom: 20px;
         }
-        .container {
-            max-width: 400px;
-            margin: auto;
-            background: #fff;
+        .button {
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .form-container {
+            display: none;
+            margin-top: 30px;
+            background: white;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
         }
-        form input {
+        .form-container input {
             width: 100%;
             padding: 10px;
             margin: 8px 0;
             box-sizing: border-box;
         }
-        form button {
+        .form-container button {
             width: 100%;
             padding: 10px;
-            background-color: #007BFF;
+            background-color: #28a745;
             border: none;
             color: white;
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
         }
+        .form-container button:hover {
+            background-color: #218838;
+        }
         .message {
             color: red;
             margin-top: 10px;
             text-align: center;
         }
-        .alert {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            text-align: center;
-        }
-        .alert-warning {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-        }
     </style>
+    <script>
+        function showForm() {
+            document.getElementById('adminForm').style.display = 'block';
+        }
+    </script>
 </head>
 <body>
-    <div class="container">
-        <h1>Cihaz Takip Sistemi</h1>
-        <h3 style="text-align: center;">Admin Giriş</h3>
+
+    <h1>Hoş Geldiniz</h1>
+    <p>Cihaz Takip Sistemine hoş geldiniz. QR kodları kullanarak cihazlara giriş yapabilirsiniz.</p>
+
+    <button class="button" onclick="showForm()">🔐 Admin Paneli</button>
+
+    <div id="adminForm" class="form-container">
         <form method="POST" action="/admin_login">
             <input type="email" name="email" placeholder="Admin Email" required>
             <input type="password" name="password" placeholder="Şifre" required>
@@ -75,14 +89,11 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                    <div class="message">{{ message }}</div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
-
-        <div style="text-align: center; margin-top: 20px;">
-            <a href="{{ url_for('admin_panel') }}"><button type="button">🔐 Admin Paneli</button></a>
-        </div>
     </div>
+
 </body>
 </html>
