@@ -39,7 +39,7 @@ def admin_panel():
 
     conn = get_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT email, cihaz_id, usage_start, usage_end FROM device_tracking ORDER BY usage_start DESC")
+    cursor.execute("SELECT email, device_id, usage_start, usage_end FROM device_tracking ORDER BY usage_start DESC")
     kayitlar = cursor.fetchall()
     cursor.close()
     conn.close()
