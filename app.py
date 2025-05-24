@@ -117,7 +117,7 @@ def device_entry(device_id):
         conn.close()
 
         return render_template("thanks.html", email=email, message=message,
-                               device_name=device_name, device_id=device_id)
+                               device_id=device_id)
 
     cursor.close()
     conn.close()
