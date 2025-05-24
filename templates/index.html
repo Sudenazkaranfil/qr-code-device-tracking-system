@@ -9,12 +9,10 @@
             margin: 40px;
             background-color: #f4f4f4;
         }
-
         h1 {
             color: #333;
             text-align: center;
         }
-
         .container {
             max-width: 400px;
             margin: auto;
@@ -23,14 +21,12 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-
         form input {
             width: 100%;
             padding: 10px;
             margin: 8px 0;
             box-sizing: border-box;
         }
-
         form button {
             width: 100%;
             padding: 10px;
@@ -41,25 +37,21 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
         .message {
             color: red;
             margin-top: 10px;
             text-align: center;
         }
-
         .alert {
             padding: 10px;
             margin: 10px 0;
             border-radius: 5px;
             text-align: center;
         }
-
         .alert-warning {
             background-color: #fff3cd;
             color: #856404;
         }
-
         .alert-success {
             background-color: #d4edda;
             color: #155724;
@@ -87,6 +79,10 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{{ url_for('admin_panel') }}"><button type="button">🔐 Admin Paneli</button></a>
+        </div>
     </div>
 </body>
 </html>
