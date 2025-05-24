@@ -1,78 +1,134 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cihaz Girişi</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            text-align: center;
-            width: 100%;
-            max-width: 500px;
-        }
-        h1 {
-            color: #4CAF50;
-            font-size: 30px;
-            margin-bottom: 20px;
-        }
-        p {
-            font-size: 18px;
-            margin: 10px 0;
-        }
-        .button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 30px;
-            border: none;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .button:hover {
-            background-color: #45a049;
-        }
-        .error {
-            color: red;
-            font-size: 16px;
-        }
-        .success {
-            color: green;
-            font-size: 16px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ device_name }} - Cihaz Girişi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f4f7fb;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      padding: 20px 30px;
+    }
+
+    header img {
+      height: 60px;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      padding: 40px 30px;
+      text-align: center;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    h1 {
+      color: #0077b6;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      font-size: 15px;
+    }
+
+    .button {
+      background-color: #0077b6;
+      color: white;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #023e8a;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .success {
+      color: green;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 14px;
+      color: #999;
+      padding: 30px 0 15px;
+    }
+
+    footer img {
+      height: 40px;
+      opacity: 0.25;
+      margin-bottom: 8px;
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>{{ device_name }} Cihazı</h1>
-    <form method="POST">
+  <header>
+    <img src="/static/ksbu_logo.png" alt="KSBU Logo">
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>{{ device_name }} Cihazı</h1>
+      <form method="POST">
         <input type="email" name="email" placeholder="E-posta adresi" required>
         <button type="submit" class="button">Giriş Yap</button>
-    </form>
+      </form>
 
-    {% if error %}
+      {% if error %}
         <p class="error">{{ error }}</p>
-    {% endif %}
-    {% if message %}
+      {% endif %}
+      {% if message %}
         <p class="success">{{ message }}</p>
-    {% endif %}
-</div>
+      {% endif %}
+    </div>
+  </main>
+
+  <footer>
+    <img src="/static/ksbu_logo.png" alt="KSBU">
+    <div>© 2025 Kütahya Sağlık Bilimleri Üniversitesi - Kuyam Laboratuvarı</div>
+  </footer>
 
 </body>
 </html>
