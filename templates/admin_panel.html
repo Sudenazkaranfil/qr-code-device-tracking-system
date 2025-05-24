@@ -1,67 +1,132 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <title>Admin Paneli</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
-            background-color: #f8f9fa;
-        }
-        h2 {
-            color: #333;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background-color: white;
-        }
-        th, td {
-            padding: 12px;
-            border: 1px solid #ccc;
-            text-align: center;
-        }
-        th {
-            background-color: #007BFF;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        a.logout {
-            display: inline-block;
-            margin-top: 20px;
-            background-color: red;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-        a.logout:hover {
-            background-color: darkred;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Admin Paneli</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f4f7fb;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      padding: 20px 30px;
+    }
+
+    header img {
+      height: 60px;
+    }
+
+    main {
+      flex: 1;
+      padding: 30px;
+    }
+
+    h2 {
+      color: #0077b6;
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 14px 10px;
+      border: 1px solid #e0e0e0;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    th {
+      background-color: #0077b6;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+
+    .logout {
+      display: inline-block;
+      margin: 30px auto 0;
+      background-color: #dc3545;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    .logout:hover {
+      background-color: #bd2130;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 14px;
+      color: #999;
+      padding: 30px 0 15px;
+    }
+
+    footer img {
+      height: 40px;
+      opacity: 0.25;
+      margin-bottom: 8px;
+    }
+  </style>
 </head>
 <body>
+
+  <header>
+    <img src="/static/ksbu_logo.png" alt="KSBU Logo">
+  </header>
+
+  <main>
     <h2>Cihaz Kullanım Kayıtları</h2>
     <table>
-        <tr>
-            <th>Email</th>
-            <th>Cihaz</th>
-            <th>Giriş</th>
-            <th>Çıkış</th>
-        </tr>
-        {% for k in kayitlar %}
-        <tr>
-            <td>{{ k[0] }}</td>
-            <td>{{ k[1] }}</td>
-            <td>{{ k[2] }}</td>
-            <td>{{ k[3] if k[3] else '🔴 Aktif' }}</td>
-        </tr>
-        {% endfor %}
+      <tr>
+        <th>Email</th>
+        <th>Cihaz</th>
+        <th>Giriş</th>
+        <th>Çıkış</th>
+      </tr>
+      {% for k in kayitlar %}
+      <tr>
+        <td>{{ k[0] }}</td>
+        <td>{{ k[1] }}</td>
+        <td>{{ k[2] }}</td>
+        <td>{{ k[3] if k[3] else '🔴 Aktif' }}</td>
+      </tr>
+      {% endfor %}
     </table>
-    <a href="{{ url_for('admin_logout') }}" class="logout">Çıkış Yap</a>
+
+    <div style="text-align: center;">
+      <a href="{{ url_for('admin_logout') }}" class="logout">🚪 Çıkış Yap</a>
+    </div>
+  </main>
+
+  <footer>
+    <img src="/static/ksbu_logo.png" alt="KSBU">
+    <div>© 2025 Kütahya Sağlık Bilimleri Üniversitesi - Kuyam Laboratuvarı</div>
+  </footer>
+
 </body>
 </html>
