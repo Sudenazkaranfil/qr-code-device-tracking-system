@@ -55,76 +55,6 @@ def admin_logout():
     flash("Başarıyla çıkış yapıldı.", "success")
     return redirect(url_for("home"))
 
-# Cihaz giriş sayfası (QR üzerinden ulaşılır)
-@app.route("/cihaz/<int:device_id>", methods=["GET", "POST"])
-def device_entry(device_id):
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    # Cihaz adı sorgulama
-    cursor.execute("SELECT device_name FROM devices WHERE device_id = %s", (device_id,))
-    device = cursor.fetchone()
-    device_name = device[0] if device else "Bilinmeyen Cihaz"
-
-    if request.method == "POST":
-        email = request.form["email"]
-
-        # Kullanıcıyı bul
-        cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
-        result = cursor.fetchone()
-
-        if not result:
-            cursor.close()
-            conn.close()
-            return render_template("device_entry.html", device_id=device_id, device_name=device_name,
-                                   error="❌ Böyle bir kullanıcı bulunamadı.")
-
-        user_id = result[0]
-
-        # Aktif kullanıcı kontrolü
-        cursor.execute("""
-            SELECT id, user_id FROM device_tracking
-            WHERE CAST(device_id AS INTEGER) = %s AND usage_end IS NULL
-            ORDER BY usage_start DESC LIMIT 1
-        """, (device_id,))
-        ongoing = cursor.fetchone()
-
-        if ongoing:
-            if ongoing[1] == user_id:
-                # Aynı kullanıcı çıkış yapıyor
-                cursor.execute("""
-                    UPDATE device_tracking SET usage_end = %s WHERE id = %s
-                """, (datetime.now(), ongoing[0]))
-                message = "✅ Çıkış yapıldı."
-            else:
-                # Farklı kullanıcı çıkartılıp yeni kullanıcı giriyor
-                cursor.execute("""
-                    UPDATE device_tracking SET usage_end = %s WHERE id = %s
-                """, (datetime.now(), ongoing[0]))
-                cursor.execute("""
-                    INSERT INTO device_tracking (user_id, device_id, usage_start, email)
-                    VALUES (%s, %s, %s, %s)
-                """, (user_id, device_id, datetime.now(), email))
-                message = "🔄 Önceki kullanıcı çıkış yaptı. Yeni giriş kaydedildi."
-        else:
-            # Yeni giriş
-            cursor.execute("""
-                INSERT INTO device_tracking (user_id, device_id, usage_start, email)
-                VALUES (%s, %s, %s, %s)
-            """, (user_id, device_id, datetime.now(), email))
-            message = "✅ Giriş kaydedildi."
-
-        conn.commit()
-        cursor.close()
-        conn.close()
-
-        return render_template("thanks.html",  message=message, email=email,
-                               device_id=device_id)
-
-    cursor.close()
-    conn.close()
-    return render_template("device_entry.html", device_id=device_id, device_name=device_name)
-
 def send_admin_email(email, device_name):
     admin_email = os.getenv("ADMIN_EMAIL")
     from_email = os.getenv("EMAIL_ADDRESS")
@@ -147,6 +77,90 @@ def send_admin_email(email, device_name):
         print("📨 Admin'e e-posta gönderildi.")
     except Exception as e:
         print(f"❌ E-posta gönderilemedi: {e}")
+
+@app.route("/cihaz/<int:device_id>", methods=["GET", "POST"])
+def device_entry(device_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    # Cihaz adı sorgulaması
+    cursor.execute("SELECT device_name FROM devices WHERE device_id = %s", (device_id,))
+    device = cursor.fetchone()
+    device_name = device[0] if device else "Tanımsız Cihaz"
+
+    if request.method == "POST":
+        email = request.form["email"]
+
+        # Kullanıcıyı bul
+        cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
+        result = cursor.fetchone()
+
+        if result:
+            user_id = result[0]
+        else:
+            cursor.close()
+            conn.close()
+            return render_template("device_entry.html", device_id=device_id, device_name=device_name, error="❌ Böyle bir kullanıcı bulunamadı.")
+
+        # Cihazda aktif bir kullanıcı olup olmadığını kontrol et
+        cursor.execute("""
+            SELECT id, user_id, email FROM device_tracking
+            WHERE CAST(device_id AS INTEGER) = %s AND usage_end IS NULL
+            ORDER BY usage_start DESC LIMIT 1
+        """, (device_id,))
+        ongoing = cursor.fetchone()
+
+        if ongoing:
+            # Eğer aynı kullanıcı ise çıkış yapılacak
+            if ongoing[1] == user_id:
+                cursor.execute("""
+                    UPDATE device_tracking
+                    SET usage_end = %s
+                    WHERE id = %s
+                """, (datetime.now(), ongoing[0]))
+                conn.commit()
+
+                # Mail gönder (çıkış)
+                send_admin_email(email, device_name + " cihazından ÇIKIŞ yapıldı.")
+                message = "Çıkış yapıldı."
+
+            else:
+                # Önceki kullanıcıyı çıkart
+                cursor.execute("""
+                    UPDATE device_tracking
+                    SET usage_end = %s
+                    WHERE id = %s
+                """, (datetime.now(), ongoing[0]))
+
+                # Yeni kullanıcıyı kaydet
+                cursor.execute("""
+                    INSERT INTO device_tracking (user_id, device_id, usage_start, email)
+                    VALUES (%s, %s, %s, %s)
+                """, (user_id, device_id, datetime.now(), email))
+                conn.commit()
+
+                send_admin_email(email, device_name + " cihazına GİRİŞ yapıldı. (önceki kullanıcı çıkış yaptı)")
+                message = "Başka bir kullanıcı çıkış yaptı ve yeni giriş kaydedildi."
+
+        else:
+            # Eğer aktif kullanıcı yoksa direkt yeni giriş
+            cursor.execute("""
+                INSERT INTO device_tracking (user_id, device_id, usage_start, email)
+                VALUES (%s, %s, %s, %s)
+            """, (user_id, device_id, datetime.now(), email))
+            conn.commit()
+
+            send_admin_email(email, device_name + " cihazına GİRİŞ yapıldı.")
+            message = "Yeni giriş kaydedildi."
+
+        cursor.close()
+        conn.close()
+
+        return render_template("thanks.html", email=email, message=message, device_id=device_id)
+
+    cursor.close()
+    conn.close()
+    return render_template("device_entry.html", device_id=device_id, device_name=device_name)
 
 # UptimeRobot kontrolü için sağlık rotası (isteğe bağlı)
 @app.route("/ping")
