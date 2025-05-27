@@ -3,6 +3,8 @@ import psycopg2
 from datetime import datetime
 import os
 from dotenv import load_dotenv
+import smtplib
+from email.message import EmailMessage
 
 load_dotenv()  # .env dosyasını yükle
 
@@ -122,6 +124,29 @@ def device_entry(device_id):
     cursor.close()
     conn.close()
     return render_template("device_entry.html", device_id=device_id, device_name=device_name)
+
+def send_admin_email(email, device_name):
+    admin_email = os.getenv("ADMIN_EMAIL")
+    from_email = os.getenv("EMAIL_ADDRESS")
+    password = os.getenv("EMAIL_PASSWORD")
+
+    subject = f"Cihaz Girişi: {device_name}"
+    body = f"{email} kullanıcısı şu cihaza giriş yaptı: {device_name}"
+
+    msg = EmailMessage()
+    msg["Subject"] = subject
+    msg["From"] = from_email
+    msg["To"] = admin_email
+    msg.set_content(body)
+
+    try:
+        with smtplib.SMTP(os.getenv("EMAIL_HOST"), int(os.getenv("EMAIL_PORT"))) as server:
+            server.starttls()
+            server.login(from_email, password)
+            server.send_message(msg)
+        print("📨 Admin'e e-posta gönderildi.")
+    except Exception as e:
+        print(f"❌ E-posta gönderilemedi: {e}")
 
 # UptimeRobot kontrolü için sağlık rotası (isteğe bağlı)
 @app.route("/ping")
