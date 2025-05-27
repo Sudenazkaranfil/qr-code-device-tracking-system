@@ -56,6 +56,7 @@ def admin_logout():
     return redirect(url_for("home"))
 
 def send_admin_email(email, device_name):
+    print("💬 EMAIL_PORT:", os.getenv("EMAIL_PORT"))
     admin_email = os.getenv("ADMIN_EMAIL")
     from_email = os.getenv("EMAIL_ADDRESS")
     password = os.getenv("EMAIL_PASSWORD")
